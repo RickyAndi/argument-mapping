@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<style>
+		.panel:hover {
+			cursor: pointer; 
+			cursor: hand;
+		}
+
+		.panel {
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+
+		<div class="modal fade bs-example-modal-lg" id="create-argument-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+			<div class="modal-dialog modal-lg" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			<h4 v-if="status == 'create-argument'">Buat Argumen</h4>
+		      			<h4 v-if="status == 'create-rebuttal'">Buat Bantahan</h4>
+		      			<h4 v-if="status == 'create-support'">Buat Dukungan</h4>
+		      			<h4 v-if="status == 'edit-argument'">Rubah Argumen</h4>
+		      		</div>
+		      		<div class="modal-body">
+		      			<div class="form-group">
+		      				<label for="">Title</label>
+		      				<input v-model="argument.title" type="text" class="form-control">
+		      			</div>
+		      			<div class="form-group">
+		      				<label for="">Content</label>
+		      				<textarea v-model="argument.message" class="form-control" name="" id="" cols="30" rows="10"></textarea>
+		      			</div>
+		      			<div class="form-group">
+		      				<button @click="createArgument($event)" class="btn btn-success">Kirim</button>
+		      				<button @click="closeModal()" class="btn btn-danger">Tutup</button>
+		      			</div>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div class="modal fade" id="view-argument-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		 	<div class="modal-dialog modal-lg" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			{{ viewedArgument.title }}
+		      		</div>
+		      		<div class="modal-body">
+		      			{{ viewedArgument.message }}
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<div class="modal fade" id="remove-argument-modal-notification" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+		 	<div class="modal-dialog modal-md" role="document">
+		    	<div class="modal-content">
+		      		<div class="modal-header">
+		      			<h4>Apakah anda akan menghapus argumen ini ?</h4>
+		      		</div>
+		      		<div class="modal-body">
+		      			<div class="row">
+		      				<div class="col-md-6">
+		      				</div>
+		      				<div class="col-md-6">
+		      					<div class="pull-right">
+		      						<button @click="removeArgumentByIndex()" class="btn btn-danger">Ya</button>
+		      						<button @click="closeModalConfirmationToRemoveArgument()" class="btn btn-success">Tidak</button>
+		      					</div>
+		      				</div>
+		      			</div>
+		      		</div>
+		    	</div>
+		  	</div>
+		</div>
+
+		<button @click="openModalToCreateArgument($event)">Buat Argumen</button>
+		<argumen-panel v-for="(argumen, index) in arguments" 
+			:uuid = "argumen.uuid"
+			:index="index" 
+			:type="argumen.type" 
+			:title="argumen.title" 
+			:message="argumen.message"
+			:right="argumen.right"
+			:top="argumen.top"
+			v-on:change-position="changePositionByIndex" 
+			v-on:create-rebuttal="openModalToCreateRebuttal"
+			v-on:create-support="openModalToCreateSupport"
+			v-on:view-argument="openModalToViewArgument"
+			v-on:remove-argument="openModalConfirmationToRemoveArgument"
+			v-on:edit-argument="openModalToEditArgument"
+		>
+		</argumen-panel>
+	</div>
+
+	<script src="bower_components/jquery/dist/jquery.js"></script>
+	<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+	<script src="bower_components/vue-strap/dist/vue-strap.js"></script>
+	<script src="bower_components/vue/dist/vue.js"></script>
+	<script src="bower_components/jsplumb/dist/js/jsPlumb-2.2.8.js"></script>
+	<script src="models.js"></script>
+
+	<script type="text/x-template" id="argumen-panel-template">
+		<div :id="uuid" v-bind:style="{width: '180px', left: right + 'px', top : top + 'px'}" class="panel" v-bind:class="{ 'panel-default': type == 'conclussion' || type == null, 'panel-success': type == 'support', 'panel-danger': type == 'rebuttal'}">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="pull-right">
+							<div class="btn-group btn-group-xs">
+								<button title="Rubah Argumen" @click="editArgument()" class="btn btn-default btn-xs"><small><i class="glyphicon glyphicon-pencil"></i></small></button>
+								<button title="Buat Support" class="btn btn-success btn-xs" @click="createSupport()"><small><i class="glyphicon glyphicon-ok-circle"></i></small></button>
+								<button title="Buat Bantahan" class="btn btn-warning btn-xs" @click="createRebuttal()"><small><i class="glyphicon glyphicon-remove-circle"></i></small></button>
+								<button title="Hapus Argumen" class="btn btn-danger btn-xs" @click="remove()"><small><i class="glyphicon glyphicon-remove"></i></small></button>
+								<button title="Pindah Posisi" class="btn btn-info btn-xs" @click="changePosition()"><small><i class="glyphicon glyphicon-move"></i></small></button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body" @click="viewArgument()">
+				{{ title }}
+			</div>
+		</div>
+	</script>
+
+	<script src="app.js"></script>
+</body>
+</html>
