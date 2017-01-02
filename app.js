@@ -31,14 +31,14 @@ new Vue({
 	el: '#app',
 	data: {
 		arguments: [
-			new Argumen(Math.random().toString(36).slice(2), 'Lorem Ipsum', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium in reprehenderit facere itaque voluptate consequuntur, facilis asperiores saepe, sint quia, molestias. Aperiam odit quod repellat facere ullam debitis, reiciendis praesentium.', '100', '100')
+			new Argument(Math.random().toString(36).slice(2), 'Lorem Ipsum', 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusantium in reprehenderit facere itaque voluptate consequuntur, facilis asperiores saepe, sint quia, molestias. Aperiam odit quod repellat facere ullam debitis, reiciendis praesentium.', '100', '100')
 		],
 		connections : [],
-		argument : new Argumen('', '', ''),
+		argument : new Argument('', '', ''),
 		createArgumentModal : null,
 		status : 'create-argument',
 		indexToBeConnected : 0,
-		viewedArgument : new Argumen('', '', ''),
+		viewedArgument : new Argument('', '', ''),
 		toBeDeletedIndex : 0,
 		toBeEditedIndex : 0
 	},
@@ -86,11 +86,13 @@ new Vue({
 					    detachable: false,
 					    connector: [ "Flowchart", { curviness:100 }, { cssClass:"labelClass" }],
 					    overlays: [ 
-					        ["Arrow" , { width:12, length:12, location:0.67 }],
+					        ["Arrow" , { width:12, length:12, location: 1 }],
 					        [ "Label", { cssClass:"labelClass" } ]
 					    ],
 					    paintStyle:{ stroke:"red" },
-					    deleteEndpointsOnDetach:true
+					    deleteEndpointsOnDetach:true,
+					    endpoint:"Blank",
+					    anchor : [ [ 0.2, 0, 0, -1 ],  [ 1, 0.2, 1, 0 ], [ 0.8, 1, 0, 1 ], [ 0, 0.8, -1, 0 ] ]
 					});
 
 					that.connections.push({ source : source , target : target , connection : conn })
@@ -116,13 +118,15 @@ new Vue({
 					    source: $('#' + source),
 					    target: $('#' + target),
 					    detachable: false,
-					    connector: [ "Flowchart", { curviness:100 }, { cssClass:"labelClass" }],
+					    connector: [ "Flowchart"],
 					    overlays: [ 
-					        ["Arrow" , { width:12, length:12, location:0.67 }],
+					        ["Arrow" , { width:12, length:12, location:1 }],
 					        [ "Label", { cssClass:"labelClass" } ]
 					    ],
 					    paintStyle:{ stroke:"green" },
-					    deleteEndpointsOnDetach: true
+					    deleteEndpointsOnDetach: true,
+					    endpoint:"Blank",
+					    anchor : [ [ 0.2, 0, 0, -1 ],  [ 1, 0.2, 1, 0 ], [ 0.8, 1, 0, 1 ], [ 0, 0.8, -1, 0 ] ]
 					});
 
 					that.connections.push({ source : source , target : target , connection : conn })
@@ -137,7 +141,7 @@ new Vue({
 			this.createArgumentModal.modal('hide');
 		},
 		cleanArgumentForm: function() {
-			this.argument = new Argumen('', '');
+			this.argument = new Argument('', '');
 		},
 		closeModal : function() {
 			this.cleanArgumentForm();
@@ -225,7 +229,7 @@ new Vue({
 			var oldTitle = this.arguments[args.index].getTitle();
 			var oldMessage = this.arguments[args.index].getMessage();
 
-			this.argument = new Argumen(null, oldTitle, oldMessage, null, null);
+			this.argument = new Argument(null, oldTitle, oldMessage, null, null);
 
 			this.showModal();
 		}
