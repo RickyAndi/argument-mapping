@@ -1,4 +1,4 @@
-function Argumen(uuid, title, message, top, right) {
+function Argument(uuid, title, message, top, right) {
 	if(uuid != '' || uuid != null) {
 		this.uuid = uuid;
 	} else {
@@ -13,42 +13,42 @@ function Argumen(uuid, title, message, top, right) {
 	this.subscribeOnMouseChange = 0;
 }
 
-Argumen.prototype.setType = function(type) {
+Argument.prototype.setType = function(type) {
 	this.type = type;
 }
 
-Argumen.prototype.setUuid = function(uuid) {
+Argument.prototype.setUuid = function(uuid) {
 	this.uuid = uuid;
 }
 
-Argumen.prototype.setTop = function(top) {
+Argument.prototype.setTop = function(top) {
 	this.top = top;
 }
 
-Argumen.prototype.setRight = function(right) {
+Argument.prototype.setRight = function(right) {
 	this.right = right;
 }
 
-Argumen.prototype.setSubscribeOnMouseChange = function(value) {
+Argument.prototype.setSubscribeOnMouseChange = function(value) {
 	this.subscribeOnMouseChange = value;
 }
 
-Argumen.prototype.getSubscribeOnMouseChange = function() {
+Argument.prototype.getSubscribeOnMouseChange = function() {
 	return this.subscribeOnMouseChange;
 }
 
-Argumen.prototype.setTitle = function(title) {
+Argument.prototype.setTitle = function(title) {
 	this.title = title;
 }
 
-Argumen.prototype.setMessage = function(message) {
+Argument.prototype.setMessage = function(message) {
 	this.message = message;
 }
 
-Argumen.prototype.getTitle = function() {
+Argument.prototype.getTitle = function() {
 	return this.title;
 }
 
-Argumen.prototype.getMessage = function() {
+Argument.prototype.getMessage = function() {
 	return this.message;
 }
