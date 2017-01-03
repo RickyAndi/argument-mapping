@@ -7,3 +7,8 @@
 .panel {
     position: absolute;
 }
+
+body {
+    background-image: url("fabricBackground.png");
+    background-repeat: repeat;
+}
