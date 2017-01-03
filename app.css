@@ -1,0 +1,9 @@
+
+.panel:hover {
+    cursor: pointer; 
+    cursor: hand;
+}
+
+.panel {
+    position: absolute;
+}
